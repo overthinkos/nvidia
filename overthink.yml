@@ -1,0 +1,89 @@
+#  overthinkos/nvidia — the NVIDIA GPU base image family, split out of the main
+#  overthink repo (2026-05). Mounted as a git submodule at image/nvidia.
+#
+#  SINGLE-FILE config: the two GPU base images (nvidia + python-ml) are inlined
+#  here. This repo VENDORS NOTHING — the GPU runtime LAYERS (nvidia, cuda,
+#  python-ml, llama-cpp) are SHARED infrastructure consumed across many families
+#  (versa, immich-ml, jupyter-ml, comfyui, unsloth, whisper, marimo) AND by the
+#  arch/cachyos/fedora/bootc base submodules, so by the shared-layer rule they
+#  STAY in the main repo and are reached here by `@github.com/...` ref. The
+#  shared build-config (distro/builder/init) arrives via a flat `import:`, and
+#  the main repo's Fedora base stack (ov.fedora-nonfree) arrives via the
+#  namespaced `ov` import.
+#
+#  This is a MUTUAL import (like cachyos): main consumes the `nvidia` image as
+#  `base: nvidia.nvidia` (comfyui / jupyter-ml / jupyter-ml-notebook / ollama /
+#  selkies-desktop-nvidia / unsloth-studio), and this repo consumes main as
+#  `ov.fedora-nonfree` + `ov.fedora-builder`. The cycle is broken at load.
+#
+#  import: has two shapes —
+#    * flat string  → build.yml (shared distro/builder/init vocabulary), merged
+#      into this repo's root namespace. Carries distro.fedora + the rpm format
+#      template.
+#    * `ov: <ref>`  → the main overthink repo mounted under the `ov` namespace,
+#      so the Fedora base stack (ov.fedora-nonfree) + the builder
+#      (ov.fedora-builder) resolve. Builder maps do NOT cross a namespace
+#      boundary, so python-ml declares its own explicit `builder:` map routing
+#      pixi/npm/cargo to ov.fedora-builder.
+#
+#  PINS — match the ecosystem exactly (the global resolver forbids one layer at
+#  two tags): build.yml + every layer ref pin to the shared-layer tag
+#  v2026.141.1600 (the same tag arch/cachyos/fedora pin, incl. the cachyos
+#  ov-cachyos profile's nvidia ref), and the `ov` namespace pins to the schema
+#  tag v2026.143.844. The nvidia/cuda layers are unchanged since v2026.141.1600,
+#  so the `nvidia` image is byte-identical to main's pre-split build; the
+#  python-ml pixi.lock (added later) is absent at this tag, so python-ml builds
+#  via a full pixi solve until the ecosystem layer tag is next bumped.
+#
+#  Directly buildable: `ov image build nvidia` (the build verb defaults to this
+#  overthink.yml). From the parent repo: `ov -C image/nvidia image build nvidia`,
+#  or anywhere: `ov --repo overthinkos/nvidia image build nvidia`.
+version: 2026.143.844
+defaults:
+    platform:
+        - linux/amd64
+    tag: auto
+    registry: ghcr.io/overthinkos
+    build:
+        - rpm
+    merge:
+        auto: false
+        max_mb: 128
+import:
+    # Shared build-config vocabulary (distro/builder/init) — flat root import.
+    # Carries distro.fedora + the rpm format template.
+    - '@github.com/overthinkos/overthink/build.yml:v2026.141.1600'
+    # Main repo entities under the `ov` namespace — ov.fedora-nonfree (the
+    # nvidia image's base) + ov.fedora-builder (python-ml's pixi/npm/cargo
+    # builder). Mutual import with main (main mounts this repo under `nvidia`);
+    # cycle-broken at load.
+    - ov: '@github.com/overthinkos/overthink:v2026.143.844'
+image:
+    nvidia:
+        # GPU base: Fedora + RPM Fusion (ov.fedora-nonfree) + the GPU runtime
+        # (nvidia layer: driver libs + nvidia-container-toolkit/CDI) + the CUDA
+        # toolkit (cuda layer: nvcc/cuDNN/onnxruntime). No builder map: none of
+        # these layers carry a pixi/npm/cargo manifest.
+        base: ov.fedora-nonfree
+        platform:
+            - linux/amd64
+        layer:
+            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.141.1600'
+            - '@github.com/overthinkos/overthink/layers/nvidia:v2026.141.1600'
+            - '@github.com/overthinkos/overthink/layers/cuda:v2026.141.1600'
+    python-ml:
+        # GPU-accelerated Python ML environment (PyTorch / transformers / vLLM /
+        # llama.cpp) on the local nvidia base. Disabled by default (heavy GPU
+        # image). The python-ml layer owns the pixi.toml, so an explicit builder
+        # map is required (builder maps do not cross the `ov` namespace boundary).
+        enabled: false
+        base: nvidia
+        builder:
+            pixi: ov.fedora-builder
+            npm: ov.fedora-builder
+            cargo: ov.fedora-builder
+        platform:
+            - linux/amd64
+        layer:
+            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.141.1600'
+            - '@github.com/overthinkos/overthink/layers/python-ml:v2026.141.1600'
