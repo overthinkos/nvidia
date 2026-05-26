@@ -38,7 +38,7 @@
 #  Directly buildable: `ov image build nvidia` (the build verb defaults to this
 #  overthink.yml). From the parent repo: `ov -C image/nvidia image build nvidia`,
 #  or anywhere: `ov --repo overthinkos/nvidia image build nvidia`.
-version: 2026.143.844
+version: 2026.144.1443
 defaults:
     platform:
         - linux/amd64
@@ -52,38 +52,12 @@ defaults:
 import:
     # Shared build-config vocabulary (distro/builder/init) — flat root import.
     # Carries distro.fedora + the rpm format template.
-    - '@github.com/overthinkos/overthink/build.yml:v2026.141.1600'
+    - '@github.com/overthinkos/overthink/build.yml:v2026.146.0858'
     # Main repo entities under the `ov` namespace — ov.fedora-nonfree (the
     # nvidia image's base) + ov.fedora-builder (python-ml's pixi/npm/cargo
     # builder). Mutual import with main (main mounts this repo under `nvidia`);
     # cycle-broken at load.
-    - ov: '@github.com/overthinkos/overthink:v2026.143.844'
-image:
-    nvidia:
-        # GPU base: Fedora + RPM Fusion (ov.fedora-nonfree) + the GPU runtime
-        # (nvidia layer: driver libs + nvidia-container-toolkit/CDI) + the CUDA
-        # toolkit (cuda layer: nvcc/cuDNN/onnxruntime). No builder map: none of
-        # these layers carry a pixi/npm/cargo manifest.
-        base: ov.fedora-nonfree
-        platform:
-            - linux/amd64
-        layer:
-            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.141.1600'
-            - '@github.com/overthinkos/overthink/layers/nvidia:v2026.141.1600'
-            - '@github.com/overthinkos/overthink/layers/cuda:v2026.141.1600'
-    python-ml:
-        # GPU-accelerated Python ML environment (PyTorch / transformers / vLLM /
-        # llama.cpp) on the local nvidia base. Disabled by default (heavy GPU
-        # image). The python-ml layer owns the pixi.toml, so an explicit builder
-        # map is required (builder maps do not cross the `ov` namespace boundary).
-        enabled: false
-        base: nvidia
-        builder:
-            pixi: ov.fedora-builder
-            npm: ov.fedora-builder
-            cargo: ov.fedora-builder
-        platform:
-            - linux/amd64
-        layer:
-            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.141.1600'
-            - '@github.com/overthinkos/overthink/layers/python-ml:v2026.141.1600'
+    - ov: '@github.com/overthinkos/overthink:v2026.146.0858'
+    - image.yml
+    - pod.yml
+    - k8s.yml

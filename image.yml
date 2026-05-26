@@ -1,0 +1,34 @@
+#  Per-kind file for image entries. Sibling of overthink.yml — included via
+#  overthink.yml's `includes:` list. The schema kind discriminator is
+#  `kind: image` for kind-keyed entries; root-shape map is `image:` (this file).
+#  2026-05 kind-files cutover.
+version: 2026.144.1443
+image:
+    nvidia:
+        # GPU base: Fedora + RPM Fusion (ov.fedora-nonfree) + the GPU runtime
+        # (nvidia layer: driver libs + nvidia-container-toolkit/CDI) + the CUDA
+        # toolkit (cuda layer: nvcc/cuDNN/onnxruntime). No builder map: none of
+        # these layers carry a pixi/npm/cargo manifest.
+        base: ov.fedora-nonfree
+        platform:
+            - linux/amd64
+        layer:
+            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.146.0858'
+            - '@github.com/overthinkos/overthink/layers/nvidia:v2026.146.0858'
+            - '@github.com/overthinkos/overthink/layers/cuda:v2026.146.0858'
+    python-ml:
+        # GPU-accelerated Python ML environment (PyTorch / transformers / vLLM /
+        # llama.cpp) on the local nvidia base. Disabled by default (heavy GPU
+        # image). The python-ml layer owns the pixi.toml, so an explicit builder
+        # map is required (builder maps do not cross the `ov` namespace boundary).
+        enabled: false
+        base: nvidia
+        builder:
+            pixi: ov.fedora-builder
+            npm: ov.fedora-builder
+            cargo: ov.fedora-builder
+        platform:
+            - linux/amd64
+        layer:
+            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.146.0858'
+            - '@github.com/overthinkos/overthink/layers/python-ml:v2026.146.0858'
