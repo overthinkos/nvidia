@@ -1,7 +1,7 @@
 # image/nvidia — signpost (not the rule-set)
 
 This submodule is the **NVIDIA / GPU runtime** image family (base for all
-GPU-accelerated images): a single `overthink.yml` that imports the main repo
+GPU-accelerated images): an `overthink.yml` (plus per-kind sibling files) that imports the main repo
 under the `ov` namespace and `build.yml` flat.
 
 **Load these skills FIRST (R0):**
