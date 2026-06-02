@@ -13,7 +13,7 @@
 #
 #  This is a MUTUAL import (like cachyos): main consumes the `nvidia` image as
 #  `base: nvidia.nvidia` (comfyui / jupyter-ml / jupyter-ml-notebook / ollama /
-#  selkies-desktop-nvidia / unsloth-studio), and this repo consumes main as
+#  unsloth-studio), and this repo consumes main as
 #  `ov.fedora-nonfree` + `ov.fedora-builder`. The cycle is broken at load.
 #
 #  import: has two shapes —

@@ -38,7 +38,7 @@ pre-split build.
 
 Main consumes the `nvidia` image as `base: nvidia.nvidia` (its GPU pod families
 — `comfyui`, `jupyter-ml`, `jupyter-ml-notebook`, `ollama`,
-`selkies-desktop-nvidia`, `unsloth-studio`), and this repo consumes main as
+`unsloth-studio`), and this repo consumes main as
 `ov.fedora-nonfree` + `ov.fedora-builder`. The import cycle is broken at load.
 
 ## Build
