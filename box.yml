@@ -2,8 +2,8 @@
 #  overthink.yml's `includes:` list. The schema kind discriminator is
 #  `kind: image` for kind-keyed entries; root-shape map is `image:` (this file).
 #  2026-05 kind-files cutover.
-version: 2026.155.1801
-image:
+version: 2026.156.557
+box:
     nvidia:
         # GPU base: Fedora + RPM Fusion (ov.fedora-nonfree) + the GPU runtime
         # (nvidia layer: driver libs + nvidia-container-toolkit/CDI) + the CUDA
@@ -12,10 +12,10 @@ image:
         base: ov.fedora-nonfree
         platform:
             - linux/amd64
-        layer:
-            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.146.0858'
-            - '@github.com/overthinkos/overthink/layers/nvidia:v2026.146.0858'
-            - '@github.com/overthinkos/overthink/layers/cuda:v2026.146.0858'
+        candy:
+            - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.146.0858'
+            - '@github.com/overthinkos/overthink/candy/nvidia:v2026.146.0858'
+            - '@github.com/overthinkos/overthink/candy/cuda:v2026.146.0858'
     python-ml:
         # GPU-accelerated Python ML environment (PyTorch / transformers / vLLM /
         # llama.cpp) on the local nvidia base. Disabled by default (heavy GPU
@@ -29,6 +29,6 @@ image:
             cargo: ov.fedora-builder
         platform:
             - linux/amd64
-        layer:
-            - '@github.com/overthinkos/overthink/layers/agent-forwarding:v2026.146.0858'
-            - '@github.com/overthinkos/overthink/layers/python-ml:v2026.146.0858'
+        candy:
+            - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.146.0858'
+            - '@github.com/overthinkos/overthink/candy/python-ml:v2026.146.0858'
