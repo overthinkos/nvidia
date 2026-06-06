@@ -35,7 +35,7 @@
 #  python-ml pixi.lock (added later) is absent at this tag, so python-ml builds
 #  via a full pixi solve until the ecosystem layer tag is next bumped.
 #
-#  Directly buildable: `ov image build nvidia` (the build verb defaults to this
+#  Directly buildable: `ov box build nvidia` (the build verb defaults to this
 #  overthink.yml). From the parent repo: `ov -C image/nvidia image build nvidia`,
 #  or anywhere: `ov --repo overthinkos/nvidia image build nvidia`.
 version: 2026.156.557

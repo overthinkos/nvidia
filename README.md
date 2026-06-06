@@ -15,12 +15,12 @@ The GPU runtime **layers** (`nvidia`, `cuda`, `python-ml`, `llama-cpp`) are
 consumed across many image families (`versa`, `immich-ml`, `jupyter-ml`,
 `comfyui`, `unsloth-studio`, `whisper`, `marimo`) and by the
 `arch`/`cachyos`/`fedora`/`bootc` base submodules, so by the shared-layer rule
-they remain in `github.com/overthinkos/overthink/layers/` and are reached here
+they remain in `github.com/overthinkos/overthink/candy/` and are reached here
 by `@github` reference.
 
 ## Composition by reference — nothing is vendored
 
-- every layer is an `@github.com/overthinkos/overthink/layers/<name>:<tag>` ref;
+- every layer is an `@github.com/overthinkos/overthink/candy/<name>:<tag>` ref;
 - the shared build-config (`build.yml` — distro/builder/init, including the
   `fedora` distro definition + the `rpm` format template) arrives via a flat
   `import:`;
@@ -51,9 +51,9 @@ ov -C image/nvidia image build python-ml --include-disabled
 
 ## Verification
 
-After `ov image build`:
+After `ov box build`:
 
-- `ov eval image nvidia` — build-scope probes (binaries, packages, CDI files).
+- `ov eval box nvidia` — build-scope probes (binaries, packages, CDI files).
 - GPU runtime probes (`nvidia-smi`, CUDA device presence) require GPU hardware
   and are exercised on a GPU host.
 
