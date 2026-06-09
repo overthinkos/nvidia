@@ -51,7 +51,7 @@ import:
     # nvidia image's base) + charly.fedora-builder (python-ml's pixi/npm/cargo
     # builder). Mutual import with main (main mounts this repo under `nvidia`);
     # cycle-broken at load.
-    - charly: '@github.com/overthinkos/overthink:v2026.160.0856'
+    - charly: '@github.com/overthinkos/overthink:v2026.160.2017'
 pod: {}
 k8s: {}
 discover:
