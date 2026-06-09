@@ -1,0 +1,17 @@
+box:
+    name: python-ml
+    # GPU-accelerated Python ML environment (PyTorch / transformers / vLLM /
+    # llama.cpp) on the local nvidia base. Disabled by default (heavy GPU
+    # image). The python-ml layer owns the pixi.toml, so an explicit builder
+    # map is required (builder maps do not cross the `charly` namespace boundary).
+    enabled: false
+    base: nvidia
+    builder:
+        pixi: charly.fedora-builder
+        npm: charly.fedora-builder
+        cargo: charly.fedora-builder
+    platform:
+        - linux/amd64
+    candy:
+        - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.160.0856'
+        - '@github.com/overthinkos/overthink/candy/python-ml:v2026.160.0856'

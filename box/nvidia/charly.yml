@@ -1,0 +1,13 @@
+box:
+    name: nvidia
+    # GPU base: Fedora + RPM Fusion (charly.fedora-nonfree) + the GPU runtime
+    # (nvidia layer: driver libs + nvidia-container-toolkit/CDI) + the CUDA
+    # toolkit (cuda layer: nvcc/cuDNN/onnxruntime). No builder map: none of
+    # these layers carry a pixi/npm/cargo manifest.
+    base: charly.fedora-nonfree
+    platform:
+        - linux/amd64
+    candy:
+        - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.160.0856'
+        - '@github.com/overthinkos/overthink/candy/nvidia:v2026.160.0856'
+        - '@github.com/overthinkos/overthink/candy/cuda:v2026.160.0856'
