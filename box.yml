@@ -2,7 +2,7 @@
 #  charly.yml's `import:` list. The schema kind discriminator is
 #  `kind: image` for kind-keyed entries; root-shape map is `image:` (this file).
 #  2026-05 kind-files cutover.
-version: 2026.159.3
+version: 2026.159.1912
 box:
     nvidia:
         # GPU base: Fedora + RPM Fusion (charly.fedora-nonfree) + the GPU runtime
@@ -13,9 +13,9 @@ box:
         platform:
             - linux/amd64
         candy:
-            - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.159.1458'
-            - '@github.com/overthinkos/overthink/candy/nvidia:v2026.159.1458'
-            - '@github.com/overthinkos/overthink/candy/cuda:v2026.159.1458'
+            - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.160.0856'
+            - '@github.com/overthinkos/overthink/candy/nvidia:v2026.160.0856'
+            - '@github.com/overthinkos/overthink/candy/cuda:v2026.160.0856'
     python-ml:
         # GPU-accelerated Python ML environment (PyTorch / transformers / vLLM /
         # llama.cpp) on the local nvidia base. Disabled by default (heavy GPU
@@ -30,5 +30,5 @@ box:
         platform:
             - linux/amd64
         candy:
-            - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.159.1458'
-            - '@github.com/overthinkos/overthink/candy/python-ml:v2026.159.1458'
+            - '@github.com/overthinkos/overthink/candy/agent-forwarding:v2026.160.0856'
+            - '@github.com/overthinkos/overthink/candy/python-ml:v2026.160.0856'

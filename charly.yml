@@ -35,7 +35,7 @@
 #  Directly buildable: `charly box build nvidia` (the build verb defaults to this
 #  charly.yml). From the parent repo: `charly -C image/nvidia image build nvidia`,
 #  or anywhere: `charly --repo overthinkos/nvidia image build nvidia`.
-version: 2026.159.3
+version: 2026.159.1912
 defaults:
     platform:
         - linux/amd64
@@ -49,12 +49,12 @@ defaults:
 import:
     # Shared build-config vocabulary (distro/builder/init) — flat root import.
     # Carries distro.fedora + the rpm format template.
-    - '@github.com/overthinkos/overthink/build.yml:v2026.159.1458'
+    - '@github.com/overthinkos/overthink/build.yml:v2026.160.0856'
     # Main repo entities under the `charly` namespace — charly.fedora-nonfree (the
     # nvidia image's base) + charly.fedora-builder (python-ml's pixi/npm/cargo
     # builder). Mutual import with main (main mounts this repo under `nvidia`);
     # cycle-broken at load.
-    - charly: '@github.com/overthinkos/overthink:v2026.159.1458'
+    - charly: '@github.com/overthinkos/overthink:v2026.160.0856'
     - box.yml
     - pod.yml
     - k8s.yml
